@@ -30,15 +30,17 @@
       command: "./configure --prefix={{ ccache_install_prefix }}"
       args:
         chdir: "{{ ccache_build_dir }}/ccache-{{ ccache_version }}"
+      changed_when: false
 
     - name: Build ccache
       command: "make -j{{ ccache_make_jobs }}"
       args:
         chdir: "{{ ccache_build_dir }}/ccache-{{ ccache_version }}"
+      changed_when: false
 
     - name: Install ccache
       become: true
-      command: "make install"
+      command: "make install"  # noqa no-changed-when
       args:
         chdir: "{{ ccache_build_dir }}/ccache-{{ ccache_version }}"
 
