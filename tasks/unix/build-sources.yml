@@ -7,10 +7,6 @@
   failed_when: false
   register: ccache_version_cmd
 
-- name: Initialize should_build_sources fact
-  set_fact:
-    should_build_sources: false
-
 - name: Build ccache from sources
   block:
     - name: Fetch ccache sources
