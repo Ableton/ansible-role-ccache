@@ -37,6 +37,8 @@
 
     - name: Install ccache
       become: true
+      # TODO: Remove this suppression when ansible-lint learns to parse block conditions
+      # See: https://github.com/ansible/ansible-lint/issues/1894
       command: "make install"  # noqa no-changed-when
       args:
         chdir: "{{ ccache_build_dir }}/ccache-{{ ccache_version }}"
