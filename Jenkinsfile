@@ -38,7 +38,8 @@ devToolsProject.run(
         withEnv(["ANSIBLE_ROLES_PATH=${data.rolesPath}"]) {
           data.venv.run('molecule --debug test --all')
         }
-      }
+      },
+      yamllint: { data.venv.run('yamllint --strict .') },
     )
   },
   deployWhen: { devToolsProject.shouldDeploy(defaultBranch: 'main') },
