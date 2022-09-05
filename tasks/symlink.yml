@@ -1,14 +1,14 @@
 ---
 - name: Ensure symlink directory exists
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ ccache_symlink_path }}"
     state: directory
     mode: "0755"
   when: ccache_symlink_path != ""
 
 - name: Determine absolute path for ccache
-  shell: "which ccache"  # noqa command-instead-of-shell
+  ansible.builtin.shell: "which ccache"  # noqa command-instead-of-shell
   environment:
     PATH: "{{ ccache_install_prefix }}/bin:{{ ansible_pkg_mgr_path }}"
   changed_when: false
@@ -17,7 +17,7 @@
 
 - name: Symlink common compiler names
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ ccache_symlink_path }}/{{ item }}"
     src: "{{ ccache_location.stdout }}"
     state: link
