@@ -1,6 +1,6 @@
 ---
 - name: Install ccache package from apt
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ccache
     state: present

@@ -1,18 +1,18 @@
 ---
 - name: Ensure ccache configuration directory exists
   become: true
-  file:
+  ansible.builtin.file:
     path: "~{{ ccache_user }}/.ccache"
     state: directory
     owner: "{{ ccache_user }}"
     mode: "0755"
 
 - name: Initialize ccache_conf_file fact
-  set_fact:
+  ansible.builtin.set_fact:
     ccache_conf_file_contents: ""
 
 - name: Build ccache configuration file contents
-  set_fact:
+  ansible.builtin.set_fact:
     ccache_conf_file_contents: >
       {{ ccache_conf_file_contents }}
       {{ item.key }} = {{ item.value }}
@@ -20,7 +20,7 @@
 
 - name: Create ccache configuration file
   become: true
-  copy:
+  ansible.builtin.copy:
     content: "{{ ccache_conf_file_contents }}"
     dest: "~{{ ccache_user }}/.ccache/ccache.conf"
     owner: "{{ ccache_user }}"
