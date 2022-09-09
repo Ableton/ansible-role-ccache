@@ -11,6 +11,10 @@ ccache_build_from_sources: false
 # https://ccache.dev/manual/latest.html#_configuration_settings
 ccache_config_options: {}
 
+# Group for the ccache_user. By default, this assumes a group with the same name as the
+# default user, ansible_user.
+ccache_group: "{{ ansible_user }}"
+
 # Where to install ccache when building from sources
 ccache_install_prefix: "/usr/local"
 
