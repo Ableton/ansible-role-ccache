@@ -1,0 +1,62 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Stat ccache config file
+      ansible.builtin.stat:
+        path: "/home/molecule/.ccache/ccache.conf"
+      register: ccache_config_file
+
+    - name: Assert that ccache config file was created correctly
+      ansible.builtin.assert:
+        that:
+          - ccache_config_file.stat.exists
+          - ccache_config_file.stat.isreg
+          - ccache_config_file.stat.pw_name == "molecule"
+          - ccache_config_file.stat.gr_name == "molecule"
+          - ccache_config_file.stat.mode == "0644"
+
+    - name: Read ccache config file
+      ansible.builtin.slurp:
+        src: "/home/molecule/.ccache/ccache.conf"
+      register: ccache_config_file_slurp
+
+    - name: Set fact for ccache_config_file_contents
+      ansible.builtin.set_fact:
+        ccache_config_file_contents: "{{ ccache_config_file_slurp.content | b64decode }}"
+
+    - name: Assert that ccache was configured correctly
+      ansible.builtin.assert:
+        that:
+          - "'cache_dir = /tmp/caches/ccache' in ccache_config_file_contents"
+          - "'compression = true' in ccache_config_file_contents"
+
+    - name: Stat ccache binary file
+      ansible.builtin.stat:
+        path: "/tmp/bin/ccache"
+      register: ccache_bin_file
+
+    - name: Assert that ccache was installed correctly from sources
+      ansible.builtin.assert:
+        that:
+          - ccache_bin_file.stat.exists
+          - ccache_bin_file.stat.isreg
+          - ccache_bin_file.stat.mode == "0755"
+
+    - name: Stat ccache symlinks
+      ansible.builtin.stat:
+        path: "/tmp/lib/ccache/{{ item }}"
+      loop:
+        - "cc"
+        - "c++"
+        - "clang"
+        - "clang++"
+      register: ccache_symlinks
+
+    - name: Assert that ccache symlinks were installed correctly
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.islnk
+          - "item.stat.lnk_target == '/tmp/bin/ccache'"
+      loop: "{{ ccache_symlinks.results }}"
