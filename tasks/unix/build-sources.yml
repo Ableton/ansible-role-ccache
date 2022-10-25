@@ -8,6 +8,9 @@
   register: ccache_version_cmd
 
 - name: Build ccache from sources
+  when: >
+    ccache_version_cmd.rc != 0 or
+    ccache_version not in ccache_version_cmd.stdout_lines[0]
   block:
     - name: Fetch ccache sources
       ansible.builtin.get_url:
@@ -52,6 +55,3 @@
       ansible.builtin.file:
         path: "{{ ccache_build_dir }}/ccache-{{ ccache_version }}.tar.gz"
         state: absent
-  when: >
-    ccache_version_cmd.rc != 0 or
-    ccache_version not in ccache_version_cmd.stdout_lines[0]
