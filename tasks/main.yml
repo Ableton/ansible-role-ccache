@@ -11,15 +11,20 @@
   when: >
     ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int <= 18
 
-- ansible.builtin.import_tasks: "unix/build-sources.yml"
+- name: Include tasks to build ccache from source on Unix
+  ansible.builtin.import_tasks: "unix/build-sources.yml"
   when: ccache_build_from_sources
 
-- ansible.builtin.include_tasks: "darwin/install-package-{{ ansible_pkg_mgr }}.yml"
+- name: Include tasks to install ccache from package on Mac
+  ansible.builtin.include_tasks: "darwin/install-package-{{ ansible_pkg_mgr }}.yml"
   when: not ccache_build_from_sources and ansible_os_family == "Darwin"
 
-- ansible.builtin.include_tasks: "debian/install-package-{{ ansible_pkg_mgr }}.yml"
+- name: Include tatks to install ccache from package on Debian-based Linux
+  ansible.builtin.include_tasks: "debian/install-package-{{ ansible_pkg_mgr }}.yml"
   when: not ccache_build_from_sources and ansible_os_family == "Debian"
 
-- ansible.builtin.import_tasks: "symlink.yml"
+- name: Include tasks to create ccache symlinks
+  ansible.builtin.import_tasks: "symlink.yml"
 
-- ansible.builtin.import_tasks: "configure.yml"
+- name: Include tasks to configuration ccache
+  ansible.builtin.import_tasks: "configure.yml"
