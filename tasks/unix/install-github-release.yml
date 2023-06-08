@@ -1,0 +1,63 @@
+---
+- name: Check ccache version
+  ansible.builtin.command: "ccache --version"
+  environment:
+    PATH: "{{ ccache_install_prefix }}/bin:{{ ansible_pkg_mgr_path }}"
+  changed_when: false
+  failed_when: false
+  register: ccache_version_cmd
+
+- name: Install ccache binary from GitHub release
+  when: >
+    ccache_version_cmd.rc != 0 or
+    ccache_version not in ccache_version_cmd.stdout_lines[0]
+  block:
+    - name: Create a temporary directory to unpack the release
+      ansible.builtin.tempfile:
+        state: directory
+      register: ccache_work_dir
+
+    - name: Set fact for ccache_release_basename
+      ansible.builtin.set_fact:
+        ccache_release_basename: "ccache-{{ ccache_version }}-\
+          {{ ccache_github_release_platforms[ansible_os_family]['name'] }}"
+
+    - name: Set fact for ccache_release_filename
+      ansible.builtin.set_fact:
+        ccache_release_filename: "{{ ccache_release_basename }}\
+          .{{ ccache_github_release_platforms[ansible_os_family]['extension'] }}"
+
+    - name: Fetch ccache release
+      ansible.builtin.get_url:
+        url: "https://github.com/ccache/ccache/releases/download/v{{ ccache_version }}\
+          /{{ ccache_release_filename }}"
+        dest: "{{ ccache_work_dir.path }}"
+        mode: "0644"
+
+    - name: Uncompress ccache release file
+      ansible.builtin.unarchive:
+        src: "{{ ccache_work_dir.path }}/{{ ccache_release_filename }}"
+        dest: "{{ ccache_work_dir.path }}"
+        mode: "0755"
+        remote_src: true
+
+    - name: Ensure that destination binary directory exists
+      become: true
+      ansible.builtin.file:
+        path: "{{ ccache_install_prefix }}/bin"
+        state: directory
+        mode: "0755"
+
+    - name: Install ccache binary
+      become: true
+      ansible.builtin.copy:
+        src: "{{ ccache_work_dir.path }}/{{ ccache_release_basename }}/ccache"
+        dest: "{{ ccache_install_prefix }}/bin"
+        mode: "0755"
+        remote_src: true
+
+  always:
+    - name: Clean temporary directory
+      ansible.builtin.file:
+        path: "{{ ccache_work_dir.path }}"
+        state: absent

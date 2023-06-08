@@ -1,0 +1,16 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    ansible_user: "molecule"
+    ccache_install_prefix: "/tmp"
+    ccache_install_type: "github"
+    ccache_symlink_path: "/tmp/lib/ccache"
+    ccache_symlink_compilers:
+      - cc
+      - c++
+      - clang
+      - clang++
+    ccache_version: "4.8.1"
+  roles:
+    - ansible-role-ccache

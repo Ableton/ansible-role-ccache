@@ -15,6 +15,10 @@
   ansible.builtin.import_tasks: "unix/build-sources.yml"
   when: ccache_install_type == "build"
 
+- name: Include tasks to install ccache from GitHub release
+  ansible.builtin.import_tasks: "unix/install-github-release.yml"
+  when: ccache_install_type == "github"
+
 - name: Include tasks to install ccache from package on Mac
   ansible.builtin.include_tasks: "darwin/install-package-{{ ansible_pkg_mgr }}.yml"
   when:
