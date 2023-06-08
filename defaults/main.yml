@@ -1,8 +1,4 @@
 ---
-# When true, compile and build ccache from source instead of installing from a package
-# manager.
-ccache_build_from_sources: false
-
 # Dictionary of key/value options to write to the ccache.conf file. Note that all values
 # should be quoted so that Ansible treats them as strings. With boolean values, this is
 # especially problematic because Python will serialize `true` as "True", and ccache values
@@ -17,6 +13,11 @@ ccache_group: "{{ ansible_user }}"
 
 # Where to install ccache when building from sources
 ccache_install_prefix: "/usr/local"
+
+# How to install ccache. Valid options include:
+# - build: Build from sources
+# - package: Use the system's package manager (default)
+ccache_install_type: "package"
 
 # Number of simultaneous jobs to use when building from sources (make -jN)
 ccache_make_jobs: 4
