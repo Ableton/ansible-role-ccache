@@ -21,6 +21,8 @@ The following variables influence how `ccache` is installed on the host:
 - `ccache_config_options`: Dictionary of key/value options to write to the `ccache.conf`
   file. For more information, please refer to the ccache manual's
   ["Configuration options" section][ccache-config-options].
+- `ccache_install_prefix`: Where to install ccache when building from sources (default:
+  `/usr/local`)
 - `ccache_symlink_compilers`: List of compiler names to symlink to `ccache_symlink_path`
   (for example, `cc`, `g++`)
 - `ccache_symlink_path`: When defined, create symlinks for common compiler names in this
