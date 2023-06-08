@@ -17,11 +17,15 @@
 
 - name: Include tasks to install ccache from package on Mac
   ansible.builtin.include_tasks: "darwin/install-package-{{ ansible_pkg_mgr }}.yml"
-  when: not ccache_build_from_sources and ansible_os_family == "Darwin"
+  when:
+    - not ccache_build_from_sources
+    - ansible_os_family == "Darwin"
 
 - name: Include tasks to install ccache from package on Debian-based Linux
   ansible.builtin.include_tasks: "debian/install-package-{{ ansible_pkg_mgr }}.yml"
-  when: not ccache_build_from_sources and ansible_os_family == "Debian"
+  when:
+    - not ccache_build_from_sources
+    - ansible_os_family == "Debian"
 
 - name: Include tasks to create ccache symlinks
   ansible.builtin.import_tasks: "symlink.yml"
