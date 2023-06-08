@@ -16,11 +16,17 @@ Role Variables
 
 The following variables influence how `ccache` is installed on the host:
 
-- `ccache_build_from_sources`: When `true`, then `ccache` sources will be downloaded and
-  compiled using the software's `configure` script.
 - `ccache_config_options`: Dictionary of key/value options to write to the `ccache.conf`
   file. For more information, please refer to the ccache manual's
   ["Configuration options" section][ccache-config-options].
+- `ccache_install_prefix`: Where to install ccache when building from sources or
+  installing precompiled binaries (default: `/usr/local`)
+- `ccache_install_type`: How to install ccache. Valid options include:
+  - `build`: Build from sources
+  - `github`: Use a precompiled binary from the ccache GitHub releases page (note: not all
+    ccache versions support all platforms. Linux binaries started appearing at release
+    4.6.1, and Mac binaries at release 4.8).
+  - `package`: Use the system's package manager (default)
 - `ccache_symlink_compilers`: List of compiler names to symlink to `ccache_symlink_path`
   (for example, `cc`, `g++`)
 - `ccache_symlink_path`: When defined, create symlinks for common compiler names in this

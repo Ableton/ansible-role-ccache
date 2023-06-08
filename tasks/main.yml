@@ -7,21 +7,29 @@
 # The ccache packages for Ubuntu <= 18.04 are too old and there are no newer backports
 - name: Force ccache to be built by source on older Ubuntu systems
   ansible.builtin.set_fact:
-    ccache_build_from_sources: true
+    ccache_install_type: "build"
   when: >
     ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int <= 18
 
 - name: Include tasks to build ccache from source on Unix
   ansible.builtin.import_tasks: "unix/build-sources.yml"
-  when: ccache_build_from_sources
+  when: ccache_install_type == "build"
+
+- name: Include tasks to install ccache from GitHub release
+  ansible.builtin.import_tasks: "unix/install-github-release.yml"
+  when: ccache_install_type == "github"
 
 - name: Include tasks to install ccache from package on Mac
   ansible.builtin.include_tasks: "darwin/install-package-{{ ansible_pkg_mgr }}.yml"
-  when: not ccache_build_from_sources and ansible_os_family == "Darwin"
+  when:
+    - ccache_install_type == "package"
+    - ansible_os_family == "Darwin"
 
-- name: Include tatks to install ccache from package on Debian-based Linux
+- name: Include tasks to install ccache from package on Debian-based Linux
   ansible.builtin.include_tasks: "debian/install-package-{{ ansible_pkg_mgr }}.yml"
-  when: not ccache_build_from_sources and ansible_os_family == "Debian"
+  when:
+    - ccache_install_type == "package"
+    - ansible_os_family == "Debian"
 
 - name: Include tasks to create ccache symlinks
   ansible.builtin.import_tasks: "symlink.yml"

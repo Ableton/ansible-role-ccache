@@ -1,3 +1,8 @@
 ---
-# Scratch directory to use when building from sources
-ccache_build_dir: "/tmp"
+ccache_github_release_platforms:
+  Darwin:
+    name: "darwin"
+    extension: "tar.gz"
+  Debian:
+    name: "linux-x86_64"
+    extension: "tar.xz"

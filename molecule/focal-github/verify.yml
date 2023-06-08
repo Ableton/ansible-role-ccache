@@ -1,0 +1,33 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Stat ccache binary file
+      ansible.builtin.stat:
+        path: "/tmp/bin/ccache"
+      register: ccache_bin_file
+
+    - name: Assert that ccache was installed correctly from the GitHub release
+      ansible.builtin.assert:
+        that:
+          - ccache_bin_file.stat.exists
+          - ccache_bin_file.stat.isreg
+          - ccache_bin_file.stat.mode == "0755"
+
+    - name: Stat ccache symlinks
+      ansible.builtin.stat:
+        path: "/tmp/lib/ccache/{{ item }}"
+      loop:
+        - "cc"
+        - "c++"
+        - "clang"
+        - "clang++"
+      register: ccache_symlinks
+
+    - name: Assert that ccache symlinks were installed correctly
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.islnk
+          - "item.stat.lnk_target == '/tmp/bin/ccache'"
+      loop: "{{ ccache_symlinks.results }}"
