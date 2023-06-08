@@ -1,3 +1,1 @@
 ---
-# Scratch directory to use when building from sources
-ccache_build_dir: "/tmp"
