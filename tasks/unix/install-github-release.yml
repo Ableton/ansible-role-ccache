@@ -40,6 +40,8 @@
         dest: "{{ ccache_work_dir.path }}"
         mode: "0755"
         remote_src: true
+      environment:
+        PATH: "{{ ansible_pkg_mgr_path }}"  # Needed on Mac to use GNU tar
 
     - name: Ensure that destination binary directory exists
       become: true
