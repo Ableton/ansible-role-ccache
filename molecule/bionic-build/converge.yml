@@ -14,4 +14,4 @@
       - clang
       - clang++
   roles:
-    - ansible-role-ccache
+    - ableton.ccache

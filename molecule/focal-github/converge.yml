@@ -13,4 +13,4 @@
       - clang++
     ccache_version: "4.8.1"
   roles:
-    - ansible-role-ccache
+    - ableton.ccache
