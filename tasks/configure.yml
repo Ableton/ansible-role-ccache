@@ -17,7 +17,7 @@
     ccache_conf_file_contents: >
       {{ ccache_conf_file_contents }}
       {{ item.key }} = {{ item.value }}
-  with_dict: "{{ ccache_config_options }}"
+  loop: "{{ ccache_config_options | dict2items }}"
 
 - name: Create ccache configuration file
   become: true
