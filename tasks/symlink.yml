@@ -14,5 +14,5 @@
     src: "{{ ccache_install_prefix }}/bin/ccache"
     state: link
     mode: "0755"
-  with_items: "{{ ccache_symlink_compilers }}"
+  loop: "{{ ccache_symlink_compilers }}"
   when: ccache_symlink_path != ""
