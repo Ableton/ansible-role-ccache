@@ -1,7 +1,7 @@
 ---
 collections:
   - name: community.general
-    version: 7.5.1
+    version: 8.0.2
 
 roles:
   - src: https://github.com/Ableton/ansible-role-pkg-mgr-path
