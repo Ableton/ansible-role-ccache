@@ -1,8 +1,11 @@
 ---
+jenkins_url: https://newci-sandbox.office.ableton.com/
+
 pull_requests:
   - main
 
 pushes:
+  - nre/main/test-on-sandbox
   - main
 
 notifications:
