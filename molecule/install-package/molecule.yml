@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: ansible-role-prometheus-node-exporter-install-package-jammy
+  - name: ansible-role-ccache-install-package-jammy
     image: ubuntu:22.04
-  - name: ansible-role-prometheus-node-exporter-install-package-noble
+  - name: ansible-role-ccache-install-package-noble
     image: ubuntu:24.04
 provisioner:
   name: ansible
