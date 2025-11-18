@@ -30,20 +30,23 @@
         remote_src: true
 
     - name: Run configure script
-      ansible.builtin.command: "./configure --prefix={{ ccache_install_prefix }}"
+      ansible.builtin.command:
+        cmd: "./configure --prefix={{ ccache_install_prefix }}"
       args:
         chdir: "{{ ccache_build_dir.path }}/ccache-{{ ccache_version }}"
       changed_when: false
 
     - name: Build ccache
-      ansible.builtin.command: "make -j{{ ccache_make_jobs }}"
+      ansible.builtin.command:
+        cmd: "make -j{{ ccache_make_jobs }}"
       args:
         chdir: "{{ ccache_build_dir.path }}/ccache-{{ ccache_version }}"
       changed_when: false
 
     - name: Install ccache
       become: true
-      ansible.builtin.command: "make install"
+      ansible.builtin.command:
+        cmd: "make install"
       args:
         chdir: "{{ ccache_build_dir.path }}/ccache-{{ ccache_version }}"
       changed_when: true
