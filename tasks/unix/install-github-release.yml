@@ -16,10 +16,16 @@
         state: directory
       register: ccache_work_dir
 
+    - name: Set fact for Linux architecture
+      when: ansible_os_family == "Debian"
+      ansible.builtin.set_fact:
+        linux_build_arch: "-{{ ccache_linux_build_arch | default(ansible_architecture) }}"
+
     - name: Set fact for ccache_release_basename
       ansible.builtin.set_fact:
         ccache_release_basename: "ccache-{{ ccache_version }}-\
-          {{ ccache_github_release_platforms[ansible_os_family]['name'] }}"
+          {{ ccache_github_release_platforms[ansible_os_family]['name'] }}\
+          {{ linux_build_arch | default('') }}"
 
     - name: Set fact for ccache_release_filename
       ansible.builtin.set_fact:
