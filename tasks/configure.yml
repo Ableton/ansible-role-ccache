@@ -8,22 +8,15 @@
     group: "{{ ccache_group }}"
     mode: "0755"
 
-- name: Initialize ccache_conf_file fact
-  ansible.builtin.set_fact:
-    ccache_conf_file_contents: ""
-
-- name: Build ccache configuration file contents
-  ansible.builtin.set_fact:
-    ccache_conf_file_contents: >
-      {{ ccache_conf_file_contents }}
-      {{ item.key }} = {{ item.value }}
-  loop: "{{ ccache_config_options | dict2items }}"
-
 - name: Create ccache configuration file
   become: true
   ansible.builtin.copy:
-    content: "{{ ccache_conf_file_contents }}"
+    content: |
+      {% for key, value in ccache_config_options.items() -%}
+      {{ key }} = {{ value }}
+      {% endfor %}
     dest: "~{{ ccache_user }}/.ccache/ccache.conf"
     owner: "{{ ccache_user }}"
     group: "{{ ccache_group }}"
     mode: "0644"
+  when: ccache_config_options | length > 0
