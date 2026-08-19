@@ -11,6 +11,9 @@ ccache_config_options: {}
 # default user, ansible_user.
 ccache_group: "{{ ansible_user }}"
 
+# Ccache builds glibc and musl-static versions of the binary since version 4.13.
+ccache_linux_build_type: "glibc"
+
 # Where to install ccache when building from sources or installing precompiled binaries
 ccache_install_prefix: "/usr/local"
 

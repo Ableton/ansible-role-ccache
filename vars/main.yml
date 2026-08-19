@@ -4,5 +4,5 @@ ccache_github_release_platforms:
     name: "darwin"
     extension: "tar.gz"
   Debian:
-    name: "linux-x86_64"
+    name: "linux"
     extension: "tar.xz"

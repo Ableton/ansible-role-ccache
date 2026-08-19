@@ -6,6 +6,10 @@
   failed_when: false
   register: ccache_version_cmd
 
+- name: Parse semantic ccache version
+  ansible.builtin.set_fact:
+    ccache_version_parsed: "{{ ccache_version.split('.') | map('int') | list }}"
+
 - name: Install ccache binary from GitHub release
   when: >
     ccache_version_cmd.rc != 0 or
@@ -16,10 +20,24 @@
         state: directory
       register: ccache_work_dir
 
+    - name: Set fact for Linux architecture
+      when: ansible_os_family == "Debian"
+      ansible.builtin.set_fact:
+        linux_build_arch: "-{{ ccache_linux_build_arch | default(ansible_architecture) }}"
+
+    - name: Set fact for Linux build type
+      when:
+        - ansible_os_family == "Debian"
+        - ccache_version_parsed[0:2] >= [4, 13]
+      ansible.builtin.set_fact:
+        linux_build_type: "-{{ ccache_linux_build_type }}"
+
     - name: Set fact for ccache_release_basename
       ansible.builtin.set_fact:
         ccache_release_basename: "ccache-{{ ccache_version }}-\
-          {{ ccache_github_release_platforms[ansible_os_family]['name'] }}"
+          {{ ccache_github_release_platforms[ansible_os_family]['name'] }}\
+          {{ linux_build_arch | default('') }}\
+          {{ linux_build_type | default('') }}"
 
     - name: Set fact for ccache_release_filename
       ansible.builtin.set_fact:
