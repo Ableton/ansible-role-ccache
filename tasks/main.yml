@@ -38,6 +38,6 @@
     file: "symlink.yml"
   when: ccache_install_type != "package"
 
-- name: Include tasks to configuration ccache
+- name: Include tasks to configure ccache
   ansible.builtin.import_tasks:
     file: "configure.yml"
