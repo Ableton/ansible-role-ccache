@@ -7,9 +7,9 @@ it for a given user.
 Requirements
 ------------
 
-Ansible >= 2.10, and a target host which is either running a Debian-flavor of Linux or
-macOS. Other Unix flavors will probably work, provided that the software is installed from
-source (see below).
+- Ansible >= 2.10
+- Package based installation is only supported for Debian based Linux and macOS.
+- Windows only supports the GitHub release installation method.
 
 Role Variables
 --------------

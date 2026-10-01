@@ -1,0 +1,13 @@
+---
+- name: Ensure ccache configuration directory exists
+  ansible.windows.win_file:
+    path: "%APPDATA%\\ccache"
+    state: directory
+
+- name: Create ccache configuration file
+  ansible.windows.win_copy:
+    content: |
+      {% for key, value in ccache_config_options.items() -%}
+      {{ key }} = {{ value }}
+      {% endfor %}
+    dest: "%APPDATA%\\ccache\\ccache.conf"
