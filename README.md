@@ -26,7 +26,7 @@ The following variables influence how `ccache` is installed on the host:
   - `github`: Use a precompiled binary from the ccache GitHub releases page (note: not all
     ccache versions support all platforms. Linux binaries started appearing at release
     4.6.1, and Mac binaries at release 4.8). For Mac hosts, this requires that you install
-    the `gnu-tar` package from homebrew.
+    the `gnu-tar` package.
   - `package`: Use the system's package manager (default)
 - `ccache_symlink_compilers`: List of compiler names to symlink to `ccache_symlink_path`
   (for example, `cc`, `g++`)
