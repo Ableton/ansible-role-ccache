@@ -48,3 +48,6 @@ ccache_user: "{{ ansible_user }}"
 
 # Version of ccache to install. Only applies when installing from sources.
 ccache_version: "3.7.5"
+
+# List of compiler aliases to create as copies of the ccache binary.
+ccache_windows_aliases: []

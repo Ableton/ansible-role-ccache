@@ -19,4 +19,3 @@
     owner: "{{ ccache_user }}"
     group: "{{ ccache_group }}"
     mode: "0644"
-  when: ccache_config_options | length > 0

@@ -1,0 +1,7 @@
+---
+- name: Create ccache aliases
+  loop: "{{ ccache_windows_aliases }}"
+  ansible.windows.win_copy:
+    dest: "{{ ccache_install_prefix }}/bin/{{ item }}"
+    remote_src: true
+    src: "{{ ccache_install_prefix }}/bin/ccache.exe"
